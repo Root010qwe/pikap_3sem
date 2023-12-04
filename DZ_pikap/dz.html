@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+
+    <title>Image Processor</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container { 
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-around;
+            padding: 20px;
+        }
+        .form-container {
+            width: 30%;
+            text-align: left;
+        }
+        #output-img { 
+            max-width: 60%;
+            height: auto;
+            border: 1px solid #ddd;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+        }
+        input, select {
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h1>Редактор</h1>
+            <form id="upload-form" enctype="multipart/form-data">
+                <label for="image">Image:</label>
+                <input type="file" name="image" id="image">
+                <label for="filter">Filter:</label>
+                <select name="filter" id="filter">
+                    <option value="none">None</option>
+                    <option value="grayscale">Grayscale</option>
+                    <option value="sepia">Sepia</option>
+                    <option value="invert">Invert</option>
+                </select>
+                <label for="contrast">Contrast:</label>
+                <input type="range" id="contrast" name="contrast" min="-100" max="100" value="0">
+                <label for="rotation">Rotation:</label>
+                <input type="number" id="rotation" name="rotation" min="-360" max="360" value="0">
+                <label for="blur">Blur:</label>
+                <input type="range" id="blur" name="blur" min="0" max="10" step="0.1" value="0">
+                <!-- New input fields for cropping -->
+                <label for="crop_x">Crop X:</label>
+                <input type="number" id="crop_x" name="crop_x" value="0">
+                <label for="crop_y">Crop Y:</label>
+                <input type="number" id="crop_y" name="crop_y" value="0">
+                <label for="crop_width">Crop Width:</label>
+                <input type="number" id="crop_width" name="crop_width" value="0">
+                <label for="crop_height">Crop Height:</label>
+                <input type="number" id="crop_height" name="crop_height" value="0">
+                <!-- New input fields for adding text -->
+                <label for="text">Text:</label>
+                <input type="text" id="text" name="text" value="">
+                <label for="text_size">Text Size:</label>
+                <input type="number" id="text_size" name="text_size" value="20">
+                <label for="text_color">Text Color (Hex):</label>
+                <input type="text" id="text_color" name="text_color" value="#000000">
+                <label for="text_x">Text X:</label>
+                <input type="number" id="text_x" name="text_x" value="0">
+                <label for="text_y">Text Y:</label>
+                <input type="number" id="text_y" name="text_y" value="0">
+                <input type="button" value="Process" onclick="processImage()">
+            </form>
+        </div>
+        <img id="output-img" src="" alt="Processed Image" />
+    </div>
+
+    <script>
+        function processImage() {
+            var formData = new FormData(document.getElementById('upload-form'));
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                var imageUrl = URL.createObjectURL(blob);
+                document.getElementById('output-img').src = imageUrl;
+            });
+        }
+    </script>
+</body>
+</html>

@@ -5,9 +5,8 @@ from unique import Unique
 from print_result import print_result
 from cm_timer import cm_timer_1
 
-path = r'"C:\Users\marat\OneDrive\Рабочий стол\Lab 4-5\data_light.json"'
-
-with open(path) as f:
+path = r"C:\Windows\System32\pikap_3sem\Lab 4-5\data_light.json"
+with open(path, 'r', encoding='utf-8') as f:  # Specify 'utf-8' encoding here
     data = json.load(f)
 
 
